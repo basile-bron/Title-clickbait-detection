@@ -6,7 +6,7 @@ import re
 #Import data function
 def import_data(data_name, filename):
     data=[]
-    with open(filename, encoding='ansi') as inputfile:
+    with open(filename, encoding='utf-8') as inputfile:
         for line in inputfile:
             data.append(line.strip())
         data = np.array(data)
