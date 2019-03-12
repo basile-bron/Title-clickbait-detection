@@ -6,59 +6,71 @@ from gensim.models import KeyedVectors
 from gensim.models import Word2Vec
 import gc
 #custom
-from data_import import videos
-
+from data_import import videos,logger
 ################################################################################
 #Vectorize function
-def vectorize(titles,model):
-
-	#initialise in tree step because i don't have a pc from the nasa, and at least it is easier to understand
-	#print("initialisation of the input")
-	#the size of the vector of each word will be 300
-	word_vector = [0 for x in range(300)]
-	#the size of the title is 110 becaus on average most of the title are less than that (this is arbitrary, d'ont hesitate to change it)
-	title = [word_vector for j in range(110) ]
-	#word_vector * number of words in title * number of titles
-	result = [title for j in range(len(titles)) ]
+def vectorize(titles,model, videos):
+	#logger.debug("Vectorizing CSV : %s",len(titles)," titles")
+	x = np.zeros((len(titles),110,300))
+	y = np.zeros((len(titles)))
+	clean_titles = np.zeros((len(titles),110))
 	n=0
+	print("result shape will be : ", x.shape)
 
-	for title in titles:
-		w=0
-		##print('title n:',n,' is ', title)
-		title = str(title)
-		for word in title.split():
+	for video in videos:
+
+		#debug
+		print(video.ratings)
+
+		titles[n] = str(titles[n])
+		np.append(y, video.ratings)
+		np.append(x[n][0], video.number_of_capital_letter)
+		np.append(x[n][1], video.number_of_exclamation_point)
+		np.append(x[n][2], video.number_of_interogation_point)
+
+		np.append(clean_titles[n][0], video.number_of_capital_letter)
+		np.append(clean_titles[n][1], video.number_of_exclamation_point)
+		np.append(clean_titles[n][2], video.number_of_interogation_point)
+		w=3
+
+		for word in titles[n].split():
 
 			#print('n :',n,' w :', w)
 			#convert to str to clean quote
 			word = str(word)
 			word = word.replace("'", "")
 
+			np.append(clean_titles[n][w], word)
+
 			try :
 				#vectorize
-				result[n][w] += model.word_vec(word)
-				##print('word',word,'in voc')
-				##print('vector is : ',word_vector)
+				np.append(x[n][w], model.word_vec(word))
+				#print('word',word,'in voc')
+				#print('vector is : ',word_vector)
 				##print('of shape : ',word_vector.shape)
 			except KeyError:
+
 				#print('word not in voc')
 				pass
 			w = w+1
 		n = n+1
+	print(x.shape)
+	print(x[10])
 
-	return result
+
+	return x, y, clean_titles
 ##########################################################
 #loading the google pretrained vocabulary for vectorization (for later use in the vectorize function, it's a big file so we dont want to load it each time we vectorize)
-print("loading google word2vec model")
+print("loading google word2vec model (can take a few minutes)")
+logger.debug("loading google word2vec model")
 model = KeyedVectors.load_word2vec_format('data/GoogleNews-vectors-negative300.bin',binary=True)
 
-videos.title vectorize(videos.title, model)
-print(videos.title.shape)
-#for video in videos:
-#	video.title = vectorize(video.title, model)
+titles = [video.title for video in videos]
+X = []
+X, Y, clean_titles = vectorize(titles, model, videos)
 
-#Debuging info
-#print('vectorized_train_titles shape :', len(vectorized_train_titles))
-#print('vectorized_test_titles shape :', len(vectorized_test_titles))
+print(X.shape)
+
 print('END OF VECTORIZATION')
 print('##################################')
 ############################################################

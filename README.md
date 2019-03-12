@@ -4,19 +4,18 @@ Detection and prediction of teasing/clickbait titles.
 
 ## Detail
 
-This project was part of youblock plugin, wich is used to blur the toxic youtube content that pollute our daily lives.
+This project is part of youblock plugin, wich is used to blur the toxic Youtube content that pollute our daily lives.
 
-plugin link :
 
 ## Instalation
 
-You will need the google vocabulary file for the vectorization part :
+Download GoogleVector file in the "data" directory :
 
 'real_data/GoogleNews-vectors-negative300.bin' Is available here [here](https://github.com/mmihaltz/word2vec-GoogleNews-vectors)
 
-## How it works
+## Dataset
 
-using a dataset of more than 1 millons title
+This repository uses a dataset of 5000  
 
 ## License
 
