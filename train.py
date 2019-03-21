@@ -40,7 +40,6 @@ train_x, train_y, test_x, test_y = split_input(X, Y)
 
 #seting the model
 print('setting the model')
-
 model = Sequential()
 
 model.add(Convolution1D(8, 2, W_regularizer=l2(0.005),input_shape=(110,300)))
@@ -69,18 +68,16 @@ print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
 model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_epoch=2, shuffle=True, verbose=2)
 
+#model.save_weights("models/detector.finetuned.h5")
+
 #debug
 #print('model layer##################')
 #print(model.layers)
 print('model sumary##################')
 print(model.summary())
-
-for i in range(0, len(test_x)):
+print(train_x.shape)
+for i in range(0, len(train_x)):
     # make a prediction
-    ynew = model.predict(test_x[1640])
-
+    ynew = model.predict(train_x[i])
     # show the inputs and predicted outputs
-    print("X=%s, Predicted=%s" % (clean_titles[1640], ynew[1640]))
-
-
-model.save_weights("models/detector.finetuned.h5")
+    print("X=%s, Predicted=%s" % (clean_titles[i], ynew[i]))
