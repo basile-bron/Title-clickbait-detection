@@ -23,8 +23,8 @@ def vectorize(titles,model, videos):
 
 		titles[n] = str(titles[n])
 		y[n] = video.ratings
-		print(video.ratings)
-		print(y)
+		#print(video.ratings)
+		#print(y)
 		x[n][0] = video.number_of_capital_letter
 		x[n][1] = video.number_of_exclamation_point
 		x[n][2] = video.number_of_interogation_point

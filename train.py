@@ -53,7 +53,7 @@ model.add(Dense(1, bias=True, W_regularizer=l2(0.001)))
 model.add(BatchNormalization())
 model.add(Activation("relu"))
 
-model.load_weights('models/detector.finetuned.h5')
+#model.load_weights('models/detector.finetuned.h5')
 
 #compile
 print('compile')
@@ -72,4 +72,8 @@ print(train_x.shape)
     # make a prediction
 ynew = model.predict(train_x)
 # show the inputs and predicted outputs
+#try:
+clean_titles = clean_titles.replace("\'\'", "")
 print("X=%s, Predicted=%s" % (clean_titles, ynew))
+#except Exception as e:
+#    raise
