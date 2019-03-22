@@ -13,24 +13,25 @@ def vectorize(titles,model, videos):
 	#logger.debug("Vectorizing CSV : %s",len(titles)," titles")
 	x = np.zeros((len(titles),110,300))
 	y = np.zeros((len(titles)))
-	clean_titles = np.zeros((len(titles),110))
+	clean_titles = [["" for x in range(0,110)] for y in range(len(titles))]
 	n=0
 	print("result shape will be : ", x.shape)
 
 	for video in videos:
 
 		#debug
-		print(video.ratings)
 
 		titles[n] = str(titles[n])
-		np.append(y, video.ratings)
-		np.append(x[n][0], video.number_of_capital_letter)
-		np.append(x[n][1], video.number_of_exclamation_point)
-		np.append(x[n][2], video.number_of_interogation_point)
+		y[n] = video.ratings
+		print(video.ratings)
+		print(y)
+		x[n][0] = video.number_of_capital_letter
+		x[n][1] = video.number_of_exclamation_point
+		x[n][2] = video.number_of_interogation_point
 
-		np.append(clean_titles[n][0], video.number_of_capital_letter)
-		np.append(clean_titles[n][1], video.number_of_exclamation_point)
-		np.append(clean_titles[n][2], video.number_of_interogation_point)
+		clean_titles[n][0] = video.number_of_capital_letter
+		clean_titles[n][1] = video.number_of_exclamation_point
+		clean_titles[n][2] = video.number_of_interogation_point
 		w=3
 
 		for word in titles[n].split():
@@ -40,11 +41,15 @@ def vectorize(titles,model, videos):
 			word = str(word)
 			word = word.replace("'", "")
 
-			np.append(clean_titles[n][w], word)
 
 			try :
 				#vectorize
-				np.append(x[n][w], model.word_vec(word))
+				""" pourquoi append et pas egale? et pk clean title me donne des chifffre mamene"""
+				x[n][w] = model.word_vec(word)
+				clean_titles[n][w] = word
+				#print(n,w)
+				#print(clean_titles[n][w])
+				#print(x[n][w])
 				#print('word',word,'in voc')
 				#print('vector is : ',word_vector)
 				##print('of shape : ',word_vector.shape)
@@ -54,8 +59,6 @@ def vectorize(titles,model, videos):
 				pass
 			w = w+1
 		n = n+1
-	print(x.shape)
-	print(x[10])
 
 
 	return x, y, clean_titles
@@ -68,7 +71,12 @@ model = KeyedVectors.load_word2vec_format('data/GoogleNews-vectors-negative300.b
 titles = [video.title for video in videos]
 X = []
 X, Y, clean_titles = vectorize(titles, model, videos)
-
+print(len(Y))
+"""
+with open('your_file.txt', 'w') as f:
+    for item in clean_titles:
+        f.write("%s\n" % item)
+"""
 print(X.shape)
 
 print('END OF VECTORIZATION')

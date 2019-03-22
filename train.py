@@ -22,22 +22,14 @@ def split_input(X, Y):
     #(arbitrary)
     training_size_pourcentage = 90
     end_x = int((len(X)/100)*training_size_pourcentage)
-
     print('assigning train data')
-    print('x')
-    train_x = X[:end_x]
-    train_y = Y[:end_x]
-    print(train_x.shape)
-    print(len(train_y))
-    print('y')
-    test_x = X[end_x:]
-    test_y = Y[end_x:]
-    print(test_x.shape)
-    print(len(test_y))
-    return train_x, train_y, test_x, test_y
-
+    return X[:end_x], Y[:end_x], X[end_x:], Y[end_x:]
+print(len(Y),"looooooooool")
 train_x, train_y, test_x, test_y = split_input(X, Y)
-
+print(train_x.shape)
+print(len(train_y))
+print(test_x.shape)
+print(len(test_y))
 #seting the model
 print('setting the model')
 model = Sequential()
@@ -66,9 +58,9 @@ model.load_weights('models/detector.finetuned.h5')
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_epoch=2, shuffle=True, verbose=2)
+model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_epoch=20, shuffle=True, verbose=2)
 
-#model.save_weights("models/detector.finetuned.h5")
+model.save_weights("models/detector.finetuned.h5")
 
 #debug
 #print('model layer##################')
@@ -76,8 +68,8 @@ model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_e
 print('model sumary##################')
 print(model.summary())
 print(train_x.shape)
-for i in range(0, len(train_x)):
+#for i in range(0, len(train_x)):
     # make a prediction
-    ynew = model.predict(train_x[i])
-    # show the inputs and predicted outputs
-    print("X=%s, Predicted=%s" % (clean_titles[i], ynew[i]))
+ynew = model.predict(train_x)
+# show the inputs and predicted outputs
+print("X=%s, Predicted=%s" % (clean_titles, ynew))

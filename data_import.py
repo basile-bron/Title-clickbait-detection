@@ -46,9 +46,8 @@ class video():
         #for key, value in data.items() :
             #print (key, value)
         #self.category = data["category"]
-        self.title = data[0].encode('utf-8').decode('utf-8')
+        self.title = data[0].encode("utf-8").decode('utf-8','ignore')
         #print(self.title)
-
         if type(data[2]) == "string": self.id = data[2]
         else: self.id = 0
 
