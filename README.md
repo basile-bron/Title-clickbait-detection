@@ -6,7 +6,10 @@ Detection and prediction of teasing/clickbait titles.
 
 This project was part of youblock plugin, wich is used to blur the toxic youtube content that pollute our daily lives.
 
-plugin link :
+More than one milion title of video evaluated on a scale 0 to 200 depending on how toxic the video is.
+Here is a graph of the data:
+
+![clickbait title dataset](img/README-a5c62a3e.png)
 
 ## Instalation
 
