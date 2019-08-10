@@ -53,12 +53,14 @@ model.add(Dense(1, bias=True, W_regularizer=l2(0.001)))
 model.add(BatchNormalization())
 model.add(Activation("relu"))
 
+
 #model.load_weights('models/detector.finetuned.h5')
+
 
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_epoch=20, shuffle=True, verbose=2)
+model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_epoch=32, shuffle=True, verbose=2)
 
 model.save_weights("models/detector.finetuned.h5")
 
@@ -73,7 +75,7 @@ print(train_x.shape)
 ynew = model.predict(train_x)
 # show the inputs and predicted outputs
 #try:
-clean_titles = clean_titles.replace("\'\'", "")
+clean_titles = [item.replace("'", "") for item in clean_titles]
 print("X=%s, Predicted=%s" % (clean_titles, ynew))
 #except Exception as e:
 #    raise
