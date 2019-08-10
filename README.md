@@ -1,7 +1,7 @@
 # Title clickbait detection
 
 Detection and prediction of teasing/clickbait titles.
-**USE THE BRANCH** (clickbait detector)[https://github.com/BasileBron/Title-clickbait-detection/tree/clickbait_detector] **FOR THE MOMENT**
+**USE THE BRANCH** [clickbait detector](https://github.com/BasileBron/Title-clickbait-detection/tree/clickbait_detector) **FOR THE MOMENT**
 
 ## Detail
 
