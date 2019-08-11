@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import sys
+import matplotlib.pyplot as plt
 #keras
 from keras.models import Sequential, Model
 from keras.layers import Convolution1D, MaxPooling1D, Flatten, Dense, Embedding, Activation, BatchNormalization, GlobalAveragePooling1D, Input, merge, ZeroPadding1D
@@ -10,9 +11,16 @@ from keras.regularizers import l2
 import itertools
 #checking if keras use gpu
 from keras import backend as K
-K.tensorflow_backend._get_available_gpus()
+#K.tensorflow_backend._get_available_gpus()
 #custom
+
+#UNCOMENT THE FOLLOWING LINE IF YOU DON't EXECUTE THE CODE CELL BY CELL USING HYDROGEN OR JUPYTER
 from vectorize import X, Y, clean_titles
+
+for i in range(len(Y)) :
+    if Y[i] != 0:
+        Y[i]=Y[i]/100
+
 
 def split_input(X, Y):
     """split the dataset to create the input data ( train_x, train_y, test_x, test_y )
@@ -54,15 +62,34 @@ model.add(BatchNormalization())
 model.add(Activation("relu"))
 
 
-#model.load_weights('models/detector.finetuned.h5')
+#model.load_weights('models/detector.finetuned.h5', by_name=True)
+model.load_weights('models/detector.h5', by_name=True)
 
 
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, nb_epoch=32, shuffle=True, verbose=2)
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=256, shuffle=True, verbose=2)
+# list all data in history
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
-model.save_weights("models/detector.finetuned.h5")
+model.save_weights("models/detector.h5")
 
 #debug
 #print('model layer##################')
@@ -73,9 +100,19 @@ print(train_x.shape)
 #for i in range(0, len(train_x)):
     # make a prediction
 ynew = model.predict(train_x)
+print(ynew[1000:1025])
+
 # show the inputs and predicted outputs
 #try:
+
+clean_titles = [''.join(str(e) for e in item) for item in clean_titles]
 clean_titles = [item.replace("'", "") for item in clean_titles]
+[print(item) for item in Y[1000:1025]]
+print(Y[1:20])
+print("X=%s, Predicted=%s" % (Y, ynew))
+
+
+
 print("X=%s, Predicted=%s" % (clean_titles, ynew))
 #except Exception as e:
 #    raise
