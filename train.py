@@ -69,7 +69,7 @@ model.load_weights('models/detector.h5', by_name=True)
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=256, shuffle=True, verbose=2)
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=16, epochs=500, shuffle=True, verbose=2)
 # list all data in history
 print(history.history.keys())
 # summarize history for accuracy
@@ -110,8 +110,6 @@ clean_titles = [item.replace("'", "") for item in clean_titles]
 [print(item) for item in Y[1000:1025]]
 print(Y[1:20])
 print("X=%s, Predicted=%s" % (Y, ynew))
-
-
 
 print("X=%s, Predicted=%s" % (clean_titles, ynew))
 #except Exception as e:
