@@ -4,7 +4,7 @@ import sys
 import matplotlib.pyplot as plt
 #keras
 from keras.models import Sequential, Model
-from keras.layers import Convolution1D, MaxPooling1D, Flatten, Dense, Embedding, Activation, BatchNormalization, GlobalAveragePooling1D, Input, merge, ZeroPadding1D
+from keras.layers import Convolution1D, MaxPooling1D, Flatten, Dense, Embedding, Activation, BatchNormalization, GlobalAveragePooling1D, Input, merge, ZeroPadding1D,LeakyReLU
 from keras.preprocessing import sequence
 from keras.optimizers import RMSprop, Adam, SGD
 from keras.regularizers import l2
@@ -42,24 +42,25 @@ print(len(test_y))
 print('setting the model')
 model = Sequential()
 
-model.add(Convolution1D(8, 2, W_regularizer=l2(0.005),input_shape=(110,300)))
+model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.005),input_shape=(110,300)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(LeakyReLU(alpha=0.1))
 
-model.add(Convolution1D(8, 2, W_regularizer=l2(0.001)))
+model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(LeakyReLU(alpha=0.1))
 
-model.add(Convolution1D(8, 2, W_regularizer=l2(0.001)))
+
+model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(LeakyReLU(alpha=0.1))
 
 model.add(MaxPooling1D(17))
 model.add(Flatten())
 
-model.add(Dense(1, bias=True, W_regularizer=l2(0.001)))
+model.add(Dense(1, use_bias=True, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(LeakyReLU(alpha=0.1))
 
 
 #model.load_weights('models/detector.finetuned.h5', by_name=True)
@@ -69,7 +70,7 @@ model.load_weights('models/detector.h5', by_name=True)
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=16, epochs=500, shuffle=True, verbose=2)
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=50, shuffle=True, verbose=0)
 # list all data in history
 print(history.history.keys())
 # summarize history for accuracy
