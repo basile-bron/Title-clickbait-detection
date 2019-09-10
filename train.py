@@ -44,16 +44,18 @@ model = Sequential()
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.005),input_shape=(110,300)))
 model.add(BatchNormalization())
-model.add(LeakyReLU(alpha=0.1))
+model.add(Activation("relu"))
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(LeakyReLU(alpha=0.1))
+model.add(Activation("relu"))
+
 
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(LeakyReLU(alpha=0.1))
+model.add(Activation("relu"))
+
 
 model.add(MaxPooling1D(17))
 model.add(Flatten())
@@ -70,7 +72,7 @@ model.load_weights('models/detector.h5', by_name=True)
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=50, shuffle=True, verbose=0)
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=50, shuffle=True, verbose=2)
 # list all data in history
 print(history.history.keys())
 # summarize history for accuracy
