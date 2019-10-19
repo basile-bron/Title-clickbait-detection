@@ -72,7 +72,7 @@ model.load_weights('models/detector.h5', by_name=True)
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=50, shuffle=True, verbose=2)
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=50, shuffle=True, verbose=1)
 # list all data in history
 print(history.history.keys())
 # summarize history for accuracy
