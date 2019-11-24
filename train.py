@@ -17,10 +17,9 @@ from keras import backend as K
 #UNCOMENT THE FOLLOWING LINE IF YOU DON't EXECUTE THE CODE CELL BY CELL USING HYDROGEN OR JUPYTER
 from vectorize import X, Y, clean_titles
 
-for i in range(len(Y)) :
-    if Y[i] != 0:
-        Y[i]=Y[i]/100
-
+#for i in range(len(Y)) :
+#    if Y[i] != 0:
+#        Y[i]=Y[i]/100
 
 def split_input(X, Y):
     """split the dataset to create the input data ( train_x, train_y, test_x, test_y )
@@ -32,12 +31,32 @@ def split_input(X, Y):
     end_x = int((len(X)/100)*training_size_pourcentage)
     print('assigning train data')
     return X[:end_x], Y[:end_x], X[end_x:], Y[end_x:]
-print(len(Y),"looooooooool")
+
+
+
 train_x, train_y, test_x, test_y = split_input(X, Y)
 print(train_x.shape)
 print(len(train_y))
 print(test_x.shape)
 print(len(test_y))
+
+
+
+import pandas as pd
+
+train_y=pd.cut(train_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
+test_y=pd.cut(test_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
+
+print(test_y[0:20])
+test_y.value_counts()
+
+print(train_y[0:20])
+train_y.value_counts()
+
+
+
+
+
 #seting the model
 print('setting the model')
 model = Sequential()
@@ -72,7 +91,7 @@ model.load_weights('models/detector.h5', by_name=True)
 #compile
 print('compile')
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["acc"])
-history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=50, shuffle=True, verbose=1)
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=25, shuffle=True, verbose=1)
 # list all data in history
 print(history.history.keys())
 # summarize history for accuracy
