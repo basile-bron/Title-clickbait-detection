@@ -1,5 +1,8 @@
 # Title clickbait detection
 
+
+![clickbait title detection](img/banner_github.jpg)
+
 Detection and prediction of teasing/clickbait titles.
 
 ## Detail
