@@ -16,11 +16,11 @@ logging.basicConfig(filename = "log.txt",
                     filemode = 'w')
 logger = logging.getLogger()
 # here is the diferent level you can use
-#logger.debug("lolilol")
-#logger.info("lolilol")
-#logger.warning("e")
-#logger.error("ttt")
-#logger.critical("eee")
+#logger.debug("")
+#logger.info("")
+#logger.warning("")
+#logger.error("")
+#logger.critical("")
 
 #Import data function
 def import_csv(path):
