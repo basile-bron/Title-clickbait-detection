@@ -52,9 +52,13 @@ class video():
         else: self.id = 0
 
         try:
-            self.ratings = int(data[4])
+            if int(data[4]) > 100:
+                self.ratings = 100
+            else:
+                self.ratings = int(data[4])
         except Exception as e:
             self.ratings = 0
+
 
         self.number_of_capital_letter = len(re.findall(r'[A-Z]', self.title))
         self.number_of_exclamation_point = len(re.findall('!', self.title))

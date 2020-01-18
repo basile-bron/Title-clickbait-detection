@@ -12,6 +12,7 @@ from keras.regularizers import l2
 import itertools
 #checking if keras use gpu
 from keras import backend as K
+from keras.utils import np_utils # from keras import utils as np_utils
 #K.tensorflow_backend._get_available_gpus()
 #custom
 from vectorize import X, Y, clean_titles
@@ -22,7 +23,6 @@ from data_import import logger
 #logger.warning("")
 #logger.error("")
 #logger.critical("")
-
 
 def split_input(X, Y):
     """split the dataset to create the input data ( train_x, train_y, test_x, test_y )
@@ -36,18 +36,20 @@ def split_input(X, Y):
     return X[:end_x], Y[:end_x], X[end_x:], Y[end_x:]
 
 train_x, train_y, test_x, test_y = split_input(X, Y)
+print(train_y[0:20])
+
 print(train_x.shape)
 print(len(train_y))
 print(test_x.shape)
 print(len(test_y))
 
-Y = np.zeros((5,), dtype=int)
-Y = pd.cut(train_y, bins=[-1,25,50,75,100,np.inf], labels=[(1,0,0,0,0),(0,1,0,0,0),(0,0,1,0,0),(0,0,0,1,0),(0,0,0,0,1)])
-train_y = Y
+#you need to categorise before converting to one hot otherwise it will get the last value of the dataset as the number of classes
+train_y = pd.cut(train_y, bins=[-1,24,49,74,99,np.inf], labels=[0,1,2,3,4])
+test_y = pd.cut(test_y, bins=[-1,25,50,75,100,np.inf], labels=[0,1,2,3,4])
+#convert to one hot
+train_y = np_utils.to_categorical(train_y, num_classes=5)
+test_y = np_utils.to_categorical(test_y, num_classes=5)
 
-Y = np.zeros((5,), dtype=int)
-Y = pd.cut(test_y, bins=[-1,25,50,75,100,np.inf], labels=[(1,0,0,0,0),(0,1,0,0,0),(0,0,1,0,0),(0,0,0,1,0),(0,0,0,0,1)])
-test_y = Y
 
 print(train_x.shape)
 print(len(train_y))
@@ -58,14 +60,14 @@ print(len(test_y))
 #a = np.load("fooooo.npy")
 #print(a)
 
-train_y=pd.cut(train_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
-test_y=pd.cut(test_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
+#train_y=pd.cut(train_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
+#test_y=pd.cut(test_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
 
 print(test_y[0:20])
-test_y.value_counts()
+#test_y.value_counts()
 
 print(train_y[0:20])
-train_y.value_counts()
+#train_y.value_counts()
 
 #seting the model
 print('setting the model')
@@ -81,7 +83,7 @@ model.add(Activation("relu"))
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(Activation("tanh")) #don't use relu before softmax
 
 model.add(MaxPooling1D(17))
 model.add(Flatten())
@@ -92,11 +94,11 @@ model.add(Dense(5, activation='softmax'))
 
 #model.load_weights('models/detector.finetuned.h5', by_name=True)
 model.load_weights('models/detector.h5', by_name=True)
-
+print(model.summary())
 #compile
 print('compile')
-model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
-history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=25, shuffle=True, verbose=1)
+model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["categorical_accuracy"])
+history = model.fit(train_x, train_y, validation_data=(test_x, test_y), batch_size=8, epochs=100, shuffle=True, verbose=1)
 # list all data in history
 
 print(history.history.keys())
@@ -104,10 +106,10 @@ print(history.history.keys())
 def post_train_plot(history):
     """ plot the result of the training"""
     # summarize history for accuracy
-    plt.plot(history.history['acc'])
-    plt.plot(history.history['val_acc'])
+    plt.plot(history.history['categorical_accuracy'])
+    plt.plot(history.history['val_categorical_accuracy'])
     plt.title('model accuracy')
-    plt.ylabel('accuracy')
+    plt.ylabel('categorical_accuracy')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
@@ -120,6 +122,7 @@ def post_train_plot(history):
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
 
+post_train_plot(history)
 model.save_weights("models/detector.h5")
 
 #debug

@@ -71,7 +71,7 @@ model = KeyedVectors.load_word2vec_format('data/GoogleNews-vectors-negative300.b
 titles = [video.title for video in videos]
 X = []
 X, Y, clean_titles = vectorize(titles, model, videos)
-print(len(Y))
+
 """
 with open('your_file.txt', 'w') as f:
     for item in clean_titles:
