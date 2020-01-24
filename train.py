@@ -50,11 +50,18 @@ test_y=pd.cut(test_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=T
 print(test_y[0:20])
 test_y.value_counts()
 
-print(train_y[0:20])
+print(train_x[0:20])
 train_y.value_counts()
 
-
-
+########################################
+nsamples, nx, ny = train_x.shape
+train_x = train_x.reshape((nsamples,nx*ny))
+from sklearn.linear_model import LinearRegression
+lin_reg = LinearRegression()
+train_x = train_x.dropna(subset=['score_cat'])
+train_x.isnull().sum()
+lin_reg.fit(train_x, train_y)
+####################################
 
 
 #seting the model
