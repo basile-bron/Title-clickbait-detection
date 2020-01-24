@@ -75,15 +75,15 @@ model = Sequential()
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.005),input_shape=(110,300)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(Activation("tanh"))
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("relu"))
+model.add(Activation("tanh"))
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("tanh")) #don't use relu before softmax
+model.add(Activation("sigmoid")) #don't use relu before softmax
 
 model.add(MaxPooling1D(17))
 model.add(Flatten())
@@ -91,7 +91,7 @@ model.add(Flatten())
 model.add(Dense(1, use_bias=True, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
 model.add(Dense(5, activation='softmax'))
-
+model.add(Dense(5, activation='softmax'))
 #model.load_weights('models/detector.finetuned.h5', by_name=True)
 model.load_weights('models/detector.h5', by_name=True)
 print(model.summary())
