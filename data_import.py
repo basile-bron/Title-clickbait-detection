@@ -63,6 +63,10 @@ class video():
         self.number_of_capital_letter = len(re.findall(r'[A-Z]', self.title))
         self.number_of_exclamation_point = len(re.findall('!', self.title))
         self.number_of_interogation_point = len(re.findall('\\?', self.title))
+        #self.number_of_dash = len(re.findall('-', self.title))
+
+
+
 
 print("Importing data")
 data = import_csv('data/titles.csv') #create all the title

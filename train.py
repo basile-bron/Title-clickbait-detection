@@ -50,18 +50,18 @@ test_y = pd.cut(test_y, bins=[-1,25,50,75,100,np.inf], labels=[0,1,2,3,4])
 train_y = np_utils.to_categorical(train_y, num_classes=5)
 test_y = np_utils.to_categorical(test_y, num_classes=5)
 
-logger.info("train_x before the ANN is of shape:",train_x.shape," with train_y lenght : ", train_y)
-logger.info("test_x before the ANN is of shape: ",test_x.shape," with test_y lenght : ", test_y)
+logger.info("train_x before the ANN is of shape:",train_x.shape," with train_y lenght : ", len(train_y))
+logger.info("test_x before the ANN is of shape: ",test_x.shape," with test_y lenght : ", len(test_y))
 
 #the tree following line allow you to save the train data in a file
 #np.save("fooooo.npy", X,allow_pickle=True)
 #a = np.load("fooooo.npy")
 #print(a)
 
-logger.debug("test_x is of lenght :",test_x.value_counts(), " and first 10 instances are :", print(test_x[0:10]))
-logger.debug("test_y is of lenght :",test_y.value_counts(), " and first 10 instances are :", print(test_y[0:10]))
-logger.debug("train_x is of lenght :",train_x.value_counts(), " and first 10 instances are :", print(train_x[0:10]))
-logger.debug("train_y is of lenght :",train_y.value_counts(), " and first 10 instances are :", print(train_y[0:10]))
+logger.debug("test_x is of lenght :",len(test_x), " and first 10 instances are :", print(test_x[0:10]))
+logger.debug("test_y is of lenght :",len(test_y), " and first 10 instances are :", print(test_y[0:10]))
+logger.debug("train_x is of lenght :",len(train_x), " and first 10 instances are :", print(train_x[0:10]))
+logger.debug("train_y is of lenght :",len(train_y), " and first 10 instances are :", print(train_y[0:10]))
 
 #seting the model
 print('setting the model')
@@ -69,11 +69,11 @@ model = Sequential()
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.005),input_shape=(110,300)))
 model.add(BatchNormalization())
-model.add(Activation("tanh"))
+model.add(Activation("relu"))
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())
-model.add(Activation("tanh"))
+model.add(Activation("relu"))
 
 model.add(Convolution1D(8, 2, kernel_regularizer=l2(0.001)))
 model.add(BatchNormalization())

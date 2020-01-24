@@ -17,10 +17,9 @@ Here is a little preview of the content
 
 ## Result
 
-For the moment the accuracy is around 70%.
-Which is promising considering the small amount of data.
+For the moment the does not generalize well enough to be exploitable.
 
-## Instalation
+## Installation
 
 Download GoogleVector file in the "data" directory :
 
