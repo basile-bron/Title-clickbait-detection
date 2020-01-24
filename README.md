@@ -1,5 +1,8 @@
 # Title clickbait detection
 
+
+![clickbait title detection](img/banner_github.jpg)
+
 Detection and prediction of teasing/clickbait titles.
 
 ## Detail
@@ -14,7 +17,8 @@ Here is a little preview of the content
 
 ## Result
 
-Not good enough for the moment (not above 60% accuracy).
+For the moment the accuracy is around 70%.
+Which is promising considering the small amount of data.
 
 ## Instalation
 
