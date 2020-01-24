@@ -17,7 +17,7 @@ from keras.utils import np_utils # from keras import utils as np_utils
 #custom
 from vectorize import X, Y, clean_titles
 from data_import import logger
-# here is the diferent level you can use
+# here are the diferent level you can use
 #logger.debug("")
 #logger.info("")
 #logger.warning("")
@@ -37,37 +37,31 @@ def split_input(X, Y):
 
 train_x, train_y, test_x, test_y = split_input(X, Y)
 print(train_y[0:20])
-
 print(train_x.shape)
 print(len(train_y))
 print(test_x.shape)
 print(len(test_y))
 
 #you need to categorise before converting to one hot otherwise it will get the last value of the dataset as the number of classes
+"""Categorise data"""
 train_y = pd.cut(train_y, bins=[-1,24,49,74,99,np.inf], labels=[0,1,2,3,4])
 test_y = pd.cut(test_y, bins=[-1,25,50,75,100,np.inf], labels=[0,1,2,3,4])
-#convert to one hot
+"""Convert to one hot encoding"""
 train_y = np_utils.to_categorical(train_y, num_classes=5)
 test_y = np_utils.to_categorical(test_y, num_classes=5)
 
+logger.info("train_x before the ANN is of shape:",train_x.shape," with train_y lenght : ", train_y)
+logger.info("test_x before the ANN is of shape: ",test_x.shape," with test_y lenght : ", test_y)
 
-print(train_x.shape)
-print(len(train_y))
-print(test_x.shape)
-print(len(test_y))
 #the tree following line allow you to save the train data in a file
 #np.save("fooooo.npy", X,allow_pickle=True)
 #a = np.load("fooooo.npy")
 #print(a)
 
-#train_y=pd.cut(train_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
-#test_y=pd.cut(test_y, bins=[0, 25,50,75,100], labels=[1,2,3,4], include_lowest=True)
-
-print(test_y[0:20])
-#test_y.value_counts()
-
-print(train_y[0:20])
-#train_y.value_counts()
+logger.debug("test_x is of lenght :",test_x.value_counts(), " and first 10 instances are :", print(test_x[0:10]))
+logger.debug("test_y is of lenght :",test_y.value_counts(), " and first 10 instances are :", print(test_y[0:10]))
+logger.debug("train_x is of lenght :",train_x.value_counts(), " and first 10 instances are :", print(train_x[0:10]))
+logger.debug("train_y is of lenght :",train_y.value_counts(), " and first 10 instances are :", print(train_y[0:10]))
 
 #seting the model
 print('setting the model')

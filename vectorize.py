@@ -11,6 +11,7 @@ from data_import import videos,logger
 #Vectorize function
 def vectorize(titles,model, videos):
 	#logger.debug("Vectorizing CSV : %s",len(titles)," titles")
+	"""initialise variable"""
 	x = np.zeros((len(titles),110,300))
 	y = np.zeros((len(titles)))
 	clean_titles = [["" for x in range(0,110)] for y in range(len(titles))]
@@ -18,13 +19,13 @@ def vectorize(titles,model, videos):
 	print("result shape will be : ", x.shape)
 
 	for video in videos:
-
-		#debug
-
+		#convert title to string
 		titles[n] = str(titles[n])
+		#define output as the score
 		y[n] = video.ratings
 		#print(video.ratings)
 		#print(y)
+		#add new parameter to the input
 		x[n][0] = video.number_of_capital_letter
 		x[n][1] = video.number_of_exclamation_point
 		x[n][2] = video.number_of_interogation_point
@@ -35,16 +36,13 @@ def vectorize(titles,model, videos):
 		w=3
 
 		for word in titles[n].split():
-
 			#print('n :',n,' w :', w)
 			#convert to str to clean quote
 			word = str(word)
 			word = word.replace("'", "")
-
-
 			try :
 				#vectorize
-				""" pourquoi append et pas egale? et pk clean title me donne des chifffre mamene"""
+				""" find vectorize version of the word on the google voc"""
 				x[n][w] = model.word_vec(word)
 				clean_titles[n][w] = word
 				#print(n,w)
