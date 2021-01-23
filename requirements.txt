@@ -1,0 +1,8 @@
+tensorflow-gpu
+numpy
+flask
+pandas
+keras
+matplotlib
+tensorflow
+flask_wtf

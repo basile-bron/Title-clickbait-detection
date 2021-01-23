@@ -1,0 +1,8 @@
+version: '3.0'
+services:
+    endpoint:
+        build: .
+        ports:
+            - 8080:5000
+        volumes:
+            - /Users/Skull/Desktop/Title-clickbait-detection:/code
