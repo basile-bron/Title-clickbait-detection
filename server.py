@@ -1,6 +1,5 @@
 from flask import Flask
 from prediction import predict
-import json
 
 import tensorflow as tf
 import pandas as pd
@@ -74,14 +73,10 @@ server = Flask(__name__)
 def hello():
     return 'Title clickbait API'
 
-@server.route("/api/<title>")
+@server.route("/<title>")
 def api(title):
     result, test_sequences, test_padded_titles = predict(model, title, tokenizer, pad_sequences, max_length)
-    list = [{'result': result, 'title': title},
-            {'tokenized': test_sequences, 'padded': test_padded_titles}]
-    for line in list:
-        yield '%s</br>\n' % lineup
-    return flask.Response(inner(), mimetype='text/html')
+    return ('%s') % result
 
 if __name__ == "__main__":
     server.run(host='0.0.0.0')
