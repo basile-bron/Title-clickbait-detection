@@ -6,3 +6,4 @@ keras
 matplotlib
 tensorflow
 flask_wtf
+Flask-SSLify

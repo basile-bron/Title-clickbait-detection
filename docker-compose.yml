@@ -3,6 +3,6 @@ services:
     tcd:
         build: .
         ports:
-            - 8080:5000
+            - 443:5000
         volumes:
             - .:/code

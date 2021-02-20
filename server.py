@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, Response
 from prediction import predict
+from flask_sslify import SSLify
 
 import tensorflow as tf
 import pandas as pd
@@ -68,6 +69,7 @@ except Exception as e:
 
 
 server = Flask(__name__)
+sslify = SSLify(server)
 
 @server.route("/")
 def hello():
@@ -76,7 +78,10 @@ def hello():
 @server.route("/<title>")
 def api(title):
     result, test_sequences, test_padded_titles = predict(model, title, tokenizer, pad_sequences, max_length)
-    return ('%s') % result
+    resp = Response(str(result))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 if __name__ == "__main__":
-    server.run(host='0.0.0.0')
+    context = ('basile-bron.fr_2021-02-19.crt', 'basile-bron.fr_2021-02-19.key') #certificate and key files
+    server.run(host='0.0.0.0' , ssl_context=context)
