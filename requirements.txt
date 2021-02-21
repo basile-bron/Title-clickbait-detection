@@ -1,3 +1,5 @@
+torch
+sklearn
 tensorflow-gpu
 numpy
 flask
@@ -7,3 +9,4 @@ matplotlib
 tensorflow
 flask_wtf
 Flask-SSLify
+transformers
